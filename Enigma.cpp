@@ -261,6 +261,7 @@ bool pt(char guessChar) {
 								wrongPlug.push_back(guessPlug[k]);
 						}
 						guessPlug.clear();
+						guessSingle.clear();
 						break;
 					}
 					if (checkGuessPlug(newGuess) == false) {  //contradiction
@@ -269,6 +270,7 @@ bool pt(char guessChar) {
 								wrongPlug.push_back(guessPlug[k]);
 						}
 						guessPlug.clear();
+						guessSingle.clear();
 						break;
 					}
 					else {
@@ -285,6 +287,7 @@ bool pt(char guessChar) {
 								wrongPlug.push_back(guessPlug[k]);
 						}
 						guessPlug.clear();
+						guessSingle.clear();
 						break;
 					}
 				}
