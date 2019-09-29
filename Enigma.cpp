@@ -15,7 +15,7 @@ public:
 	Wire(char p1, char p2) :w1(p1), w2(p2) {}
 	int w1, w2;
 };
-Wire wire[12];
+vector<Wire> wire;
 
 void decrypt();
 
@@ -27,6 +27,7 @@ int searchRotary(char, int);  //1ppl
 char searchPlugBoard(char);
 
 int main(int args, char* argv[]) {
+	if(args > 1)
 	if (argv[1][0] == '-' && argv[1][1] == 'd') {
 		decrypt();
 		return 0;
@@ -47,8 +48,10 @@ int main(int args, char* argv[]) {
 	cin.ignore();
 	getline(cin, plugState);
 	for (int i = 0; i < plugState.length(); i += 3) {
-		wire[plugNum].w1 = plugState[i];
-		wire[plugNum++].w2 = plugState[i + 1];
+		Wire tempWire(plugState[i], plugState[i + 1]);
+		wire.push_back(tempWire);
+		/*wire[plugNum].w1 = plugState[i];
+		wire[plugNum++].w2 = plugState[i + 1];*/
 	}
 
 	initial(selectRol, curState);
@@ -136,7 +139,8 @@ int searchRotary(char c, int rotaryNum) {
 }
 
 char searchPlugBoard(char c) {
-	for (int i = 0; i < 10; ++i) {  //plug
+	if (wire.size() == 0) return c;  //no plug set
+	for (int i = 0; i < wire.size(); ++i) {  //plug
 		if (c == wire[i].w1) {
 			return wire[i].w2;
 		}
@@ -144,6 +148,7 @@ char searchPlugBoard(char c) {
 			return wire[i].w1;
 		}
 	}
+	return c;
 }
 
 
@@ -186,6 +191,19 @@ void decrypt() {
 
 
 }
+
+bool plugTest() {
+	curPlug.clear();
+
+	curPlug.push_back('I'-'A');
+	for (int i = 0; i < 25; ++i) {
+
+	}
+
+	return false;
+}
+
+
 
 bool exhaustiveAtk(int plugAmount, string& exception) {
 	int p[12] = { 0 };
@@ -264,3 +282,6 @@ bool checkExcept(int letter, string& exception) {
 	return false;
 }
 
+bool checkAns() {
+	return false;
+}
