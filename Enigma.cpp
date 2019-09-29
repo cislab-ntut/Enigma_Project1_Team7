@@ -191,6 +191,7 @@ bool rotaryChoose3();  //third rotary, call plugTest()
 
 bool plugTest();  //first level plug set, call plugTest2() recursively
 bool pt(char);
+void addWrong();
 //bool plugTest2();  //second level, call plugTest3()
 //bool plugTest3();  //third level, call exhaustiveAtk()
 
@@ -233,7 +234,7 @@ bool plugTest() {
 
 bool pt(char guessChar) {
 
-	curPlug.push_back(guessChar-'A');
+	//curPlug.push_back(guessChar-'A');
 	Wire guess;
 	guess.w1 = guessChar;
 	for (int i = 0; i < 25; ++i) {
@@ -241,7 +242,7 @@ bool pt(char guessChar) {
 		guess.w2 = i + 'A';
 		if (searchGuessPlug(guess) || searchWrongPlug(guess)) continue;
 
-		curPlug.push_back(i);
+		//curPlug.push_back(i);
 		guessPlug.push_back(guess);  //first guess
 
 		for (int j = 0; j < 10; ++j) {
@@ -256,21 +257,11 @@ bool pt(char guessChar) {
 					Wire newGuess(outc, correctPair[j].w2);
 					guessPlug.push_back(newGuess);
 					if (searchWrongPlug(newGuess)) {
-						for (int k = 0; k < guessPlug.size(); ++k) {
-							if (!searchWrongPlug(guessPlug[k]))
-								wrongPlug.push_back(guessPlug[k]);
-						}
-						guessPlug.clear();
-						guessSingle.clear();
+						addWrong();
 						break;
 					}
 					if (checkGuessPlug(newGuess) == false) {  //contradiction
-						for (int k = 0; k < guessPlug.size(); ++k) {
-							if (!searchWrongPlug(guessPlug[k]))
-								wrongPlug.push_back(guessPlug[k]);
-						}
-						guessPlug.clear();
-						guessSingle.clear();
+						addWrong();
 						break;
 					}
 					else {
@@ -282,12 +273,7 @@ bool pt(char guessChar) {
 						guessSingle.push_back(outc);
 					}
 					else {  //contradiction
-						for (int k = 0; k < guessPlug.size(); ++k) {
-							if (!searchWrongPlug(guessPlug[k]))
-								wrongPlug.push_back(guessPlug[k]);
-						}
-						guessPlug.clear();
-						guessSingle.clear();
+						addWrong();
 						break;
 					}
 				}
@@ -295,18 +281,58 @@ bool pt(char guessChar) {
 
 			}
 		}
-		//call exhaustiveAtk if less than 6 plug
-
+		//call exhaustiveAtk if less than 6 plugs
+		if (guessPlug.size() > 6) {
+			addWrong();
+			continue;
+		}
+		else if (guessPlug.size() == 6) {
+			if (checkAns())
+				return true;
+			else {
+				addWrong();
+				continue;
+			}
+		}
+		else {  //less than 6 plugs
+			string exception;
+			for (int j = 0; j < isSingle.size(); ++j)
+				exception.push_back(isSingle[j]);
+			for (int j = 0; j < guessSingle.size(); ++j)
+				exception.push_back(guessSingle[j]);
+			curPlug.clear();
+			for (int j = 0; j < guessPlug.size(); ++j) {
+				curPlug.push_back(guessPlug[j].w1);
+				curPlug.push_back(guessPlug[j].w2);
+			}
+			if (exhaustiveAtk(6 - guessPlug.size(), exception)) {
+				return true;
+			}
+			else {
+				addWrong();
+				continue;
+			}
+		}
 
 
 	}
 	//guessChar is single
-
+	isSingle.push_back(guessChar);
+	guessPlug.clear();
+	guessSingle.clear();
 
 
 	return false;
 }
 
+void addWrong() {
+	for (int i = 0; i < guessPlug.size(); ++i) {
+		if (!searchWrongPlug(guessPlug[i]))
+			wrongPlug.push_back(guessPlug[i]);
+	}
+	guessPlug.clear();
+	guessSingle.clear();
+}
 
 char encryRotary(char input) {  //encrypt only on rotary
 	int c = input - 'A';
