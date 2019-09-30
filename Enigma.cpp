@@ -159,8 +159,10 @@ string cipher = "IPQHUGCXZM";
 //(I,H) (I,Q) (I,G) (H,L) (H,U) (L,X)  //first level 4 or 5 plug --> go down  7 plug = wrong  6 plug --> test encry
 //(E,P) (E,Z)  //5 plug --> go down   7 plug = wrong  6 plug --> test
 //(T,C) (R,M)  //                     7 plug = wrong  6 plug --> test
-Wire correctPair[10] = { Wire('I','H'), Wire('I','Q'), Wire('I','G'), Wire('H','L'), Wire('H','U'), Wire('L','X'), Wire('E','P'), Wire('E','Z'), Wire('T','C'), Wire('R','M') };
-int pairPosition[10] = { 0, 2, 5, 3, 4, 7, 1, 8, 6, 9 };
+Wire correctPair[20] = { Wire('I','H'), Wire('I','Q'), Wire('I','G'), Wire('H','L'), Wire('H','U'), Wire('L','X'), Wire('E','P'), Wire('E','Z'), Wire('T','C'), Wire('R','M'),
+						 Wire('H','I'), Wire('Q','I'), Wire('G','I'), Wire('L','H'), Wire('U','H'), Wire('X','L'), Wire('P','E'), Wire('Z','E'), Wire('C','T'), Wire('M','R') };
+int pairPosition[20] = { 0, 2, 5, 3, 4, 7, 1, 8, 6, 9,
+						 0, 2, 5, 3, 4, 7, 1, 8, 6, 9};
 char guessChars[14] = { 'I', 'H', 'Q', 'G', 'L', 'U', 'X', 'E', 'P', 'Z', 'T', 'C', 'R', 'M' };
 //vector<Wire> testPlug;  //max 6
 char testChar[3] = { 'I', 'E', 'C' };
@@ -183,7 +185,10 @@ bool searchIsSingle(char);
 bool searchWrongPlug(Wire&);
 bool searchWrongSingle(char);
 
-void changeRotary();
+int rotaryNums[6] = { 0, 1, 2, 3, 4, 5 };  //1 ~ 5
+vector<int> choosedRotary;
+
+bool chooseRotary(int chooseAmount, int level);  //number of rotary want to choose
 //void decryptInitial();
 bool rotaryChoose();  //first rotary, call rotaryChoose2() recursively
 bool rotaryChoose2();  //second rotary, call rotaryChoose3() recursively
@@ -208,8 +213,15 @@ void setPlug();  //set curPlug(vector<int>) into wire[12](Wire)  //can combine i
 void unrotate();  //rotate inversed
 
 void decrypt() {
+	choosedRotary.clear();
 
-
+	if (chooseRotary(3, 0)) {  //correct set
+		cout << "correct set" << endl;
+		//print out the correct set and use the set to print out the plain text
+	}
+	else {
+		//no correct set, shouldn't go in here
+	}
 
 
 }
@@ -238,14 +250,15 @@ bool pt(char guessChar) {
 	Wire guess;
 	guess.w1 = guessChar;
 	for (int i = 0; i < 25; ++i) {
+		bool wrongFlag = false;
 		if (i == guessChar - 'A') continue;
 		guess.w2 = i + 'A';
-		if (searchGuessPlug(guess) || searchWrongPlug(guess)) continue;
+		if (searchGuessPlug(guess) || searchWrongPlug(guess) || searchIsSingle((char)guess.w2)) continue;
 
 		//curPlug.push_back(i);
 		guessPlug.push_back(guess);  //first guess
 
-		for (int j = 0; j < 10; ++j) {
+		for (int j = 0; j < 20; ++j) {
 			if (correctPair[j].w1 == guessChar) {  //(I,H) (I,Q) (I,G)
 				for (int k = 0; k < 3; ++k)
 					curNum[i] = curNumSave[i];
@@ -258,10 +271,12 @@ bool pt(char guessChar) {
 					guessPlug.push_back(newGuess);
 					if (searchWrongPlug(newGuess)) {
 						addWrong();
+						wrongFlag = true;
 						break;
 					}
 					if (checkGuessPlug(newGuess) == false) {  //contradiction
 						addWrong();
+						wrongFlag = true;
 						break;
 					}
 					else {
@@ -274,6 +289,7 @@ bool pt(char guessChar) {
 					}
 					else {  //contradiction
 						addWrong();
+						wrongFlag = true;
 						break;
 					}
 				}
@@ -282,6 +298,8 @@ bool pt(char guessChar) {
 			}
 		}
 		//call exhaustiveAtk if less than 6 plugs
+		if (wrongFlag)
+			continue;
 		if (guessPlug.size() > 6) {
 			addWrong();
 			continue;
@@ -476,5 +494,33 @@ bool searchWrongSingle(char c) {
 		if (c == wrongSingle[i])
 			return true;
 	}
+	return false;
+}
+
+bool chooseRotary(int chooseAmount, int level) {  //initial (3, 0)
+	if (level < chooseAmount) {
+		for (int i = 1; i <= 5; ++i) {
+			if (searchChoosedRotary(i)) continue;  //already been chosen
+
+			choosedRotary.push_back(i);
+			if (level == chooseAmount) {
+				if (plugTest())
+					return true;
+			}
+			else if (chooseRotary(chooseAmount, level + 1)) {
+				return true;
+			}
+
+			choosedRotary.pop_back();
+		}
+	}
+
+	return false;  //should not be happend
+}
+
+bool searchChoosedRotary(int n) {
+	for (int i = 0; i < choosedRotary.size(); ++i)
+		if (n = choosedRotary[i])
+			return true;
 	return false;
 }
