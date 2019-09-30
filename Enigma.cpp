@@ -418,8 +418,13 @@ bool checkExcept(int letter, string& exception) {
 	return false;
 }
 
-bool checkAns() {
-	return false;
+bool checkAns() { 
+	setMachine();
+	string output = encrypt(plain);
+	for(int i=0;i<output.size();i++)
+		if(output[i] != cipher[i])
+			return false;
+	return true;
 }
 
 
