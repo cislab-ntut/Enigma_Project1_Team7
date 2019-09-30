@@ -34,7 +34,6 @@ int main(int args, char* argv[]) {
 			return 0;
 		}
 
-
 	string curState, plugState;  //each 3 char
 								 // 3 2 1
 	cout << "Input three rotor numbers which you want to use.(1~5)\n"
@@ -223,8 +222,6 @@ void decrypt() {
 	else {
 		//no correct set, shouldn't go in here
 	}
-
-
 }
 
 bool plugTest() {
@@ -240,6 +237,7 @@ bool plugTest() {
 	for (int i = 0; i < 14; ++i) {
 		if (pt(guessChars[i]))
 			return true;
+		cout << "PTest" << i << endl;
 	}
 
 	return false;
@@ -270,13 +268,14 @@ bool pt(char guessChar) {
 				char outc = encryRotary(i + 'A');
 				if (outc != correctPair[j].w2) {  //Wire(outc, correctPiar[j].w2)
 					Wire newGuess(outc, correctPair[j].w2);
-					guessPlug.push_back(newGuess);
 					if (searchWrongPlug(newGuess)) {
+						guessPlug.push_back(newGuess);
 						addWrong();
 						wrongFlag = true;
 						break;
 					}
 					if (checkGuessPlug(newGuess) == false) {  //contradiction
+						guessPlug.push_back(newGuess);
 						addWrong();
 						wrongFlag = true;
 						break;
@@ -284,6 +283,7 @@ bool pt(char guessChar) {
 					else {
 						//nothing, check next pair
 					}
+					guessPlug.push_back(newGuess);
 				}
 				else {  //single
 					if (checkGuessSingle(outc)) {  //no contradiction
@@ -356,6 +356,7 @@ void addWrong() {
 
 char encryRotary(char input) {  //encrypt only on rotary
 	int c = input - 'A';
+	rotate();
 	for (int i = 0; i < 3; ++i)  //first 3 rotary
 		c = (rotary[selectRol[i]][(c + curNum[i]) % 26] + 26 - curNum[i] - 'A') % 26;
 
@@ -377,7 +378,7 @@ bool exhaustiveAtk(int plugAmount, string& exception) {
 	for (int i = 0; i < 25 - 2 * plugAmount; ++i) {
 		if (checkExcept(i, exception))
 			continue;
-		curPlug.push_back(i);
+		curPlug.push_back(i + 'A');
 		if (ex(plugAmount, exception, i))
 			return true;
 		else
@@ -391,7 +392,7 @@ bool ex(int plugAmount, string& exception, int lastPlugNum) {
 	for (int i = lastPlugNum + 1; i < (second ? 26 : 25) - 2 * plugAmount; ++i) {
 		if (checkExcept(i, exception))
 			continue;
-		curPlug.push_back(i);
+		curPlug.push_back(i + 'A');
 		if (second) {
 			if (plugAmount == 1) {  //last plug choosed
 				if (checkAns())
