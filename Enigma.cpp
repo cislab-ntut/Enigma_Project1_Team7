@@ -123,7 +123,7 @@ char encry(char input) {
 
 void rotate() {
 	curNum[0] = (curNum[0] + 1) % 26;
-	if (curNum[0] == iniNum[selectRol[0]] || curNum[1] + 1 == iniNum[selectRol[1]]) {		//§PÂ_¬O§_¨ì«ü¼Ğ¦ì¸m
+	if (curNum[0] == iniNum[selectRol[0]] || curNum[1] + 1 == iniNum[selectRol[1]]) {		//Â§PÃ‚_Â¬OÂ§_Â¨Ã¬Â«Ã¼Â¼ÃÂ¦Ã¬Â¸m
 		curNum[1] = (curNum[1] + 1) % 26;
 		if (curNum[1] == iniNum[selectRol[1]]) {
 			curNum[2] = (curNum[2] + 1) % 26;
@@ -477,4 +477,14 @@ bool searchWrongSingle(char c) {
 			return true;
 	}
 	return false;
+}
+
+void setPlug(){
+	curNumSave[0] = (curNumSave[0] + 1) % 26;
+	if (curNumSave[0] == 0) {
+		curNumSave[1] = (curNumSave[1] + 1) % 26;
+		if (curNumSave[1] == 0) {
+			curNumSave[2] = (curNumSave[2] + 1) % 26;
+		}
+	}
 }
