@@ -11,7 +11,7 @@ int iniNum[6], curNum[3], plugNum = 0;
 
 class Wire {
 public:
-	Wire(){}
+	Wire() {}
 	Wire(char p1, char p2) :w1(p1), w2(p2) {}
 	int w1, w2;
 };
@@ -27,11 +27,11 @@ int searchRotary(char, int);  //1ppl
 char searchPlugBoard(char);
 
 int main(int args, char* argv[]) {
-	if(args > 1)
-	if (argv[1][0] == '-' && argv[1][1] == 'd') {
-		decrypt();
-		return 0;
-	}
+	if (args > 1)
+		if (argv[1][0] == '-' && argv[1][1] == 'd') {
+			decrypt();
+			return 0;
+		}
 
 
 	string curState, plugState;  //each 3 char
@@ -123,7 +123,7 @@ char encry(char input) {
 
 void rotate() {
 	curNum[0] = (curNum[0] + 1) % 26;
-	if (curNum[0] == iniNum[selectRol[0]] || curNum[1] + 1 == iniNum[selectRol[1]]) {		//§PÂ_¬O§_¨ì«ü¼Ð¦ì¸m
+	if (curNum[0] == iniNum[selectRol[0]] || curNum[1] + 1 == iniNum[selectRol[1]]) {		//åˆ¤æ–·æ˜¯å¦åˆ°æŒ‡æ¨™ä½ç½®
 		curNum[1] = (curNum[1] + 1) % 26;
 		if (curNum[1] == iniNum[selectRol[1]]) {
 			curNum[2] = (curNum[2] + 1) % 26;
@@ -154,15 +154,15 @@ char searchPlugBoard(char c) {
 
 //initialCurrent
 //int wireSize = 0;  //max 6
-string plain =  "HEILHITLER";
+string plain = "HEILHITLER";
 string cipher = "IPQHUGCXZM";
 //(I,H) (I,Q) (I,G) (H,L) (H,U) (L,X)  //first level 4 or 5 plug --> go down  7 plug = wrong  6 plug --> test encry
 //(E,P) (E,Z)  //5 plug --> go down   7 plug = wrong  6 plug --> test
 //(T,C) (R,M)  //                     7 plug = wrong  6 plug --> test
 Wire correctPair[20] = { Wire('I','H'), Wire('I','Q'), Wire('I','G'), Wire('H','L'), Wire('H','U'), Wire('L','X'), Wire('E','P'), Wire('E','Z'), Wire('T','C'), Wire('R','M'),
-						 Wire('H','I'), Wire('Q','I'), Wire('G','I'), Wire('L','H'), Wire('U','H'), Wire('X','L'), Wire('P','E'), Wire('Z','E'), Wire('C','T'), Wire('M','R') };
+Wire('H','I'), Wire('Q','I'), Wire('G','I'), Wire('L','H'), Wire('U','H'), Wire('X','L'), Wire('P','E'), Wire('Z','E'), Wire('C','T'), Wire('M','R') };
 int pairPosition[20] = { 0, 2, 5, 3, 4, 7, 1, 8, 6, 9,
-						 0, 2, 5, 3, 4, 7, 1, 8, 6, 9};
+0, 2, 5, 3, 4, 7, 1, 8, 6, 9 };
 char guessChars[14] = { 'I', 'H', 'Q', 'G', 'L', 'U', 'X', 'E', 'P', 'Z', 'T', 'C', 'R', 'M' };
 //vector<Wire> testPlug;  //max 6
 char testChar[3] = { 'I', 'E', 'C' };
@@ -189,7 +189,7 @@ int rotaryNums[6] = { 0, 1, 2, 3, 4, 5 };  //1 ~ 5
 vector<int> choosedRotary;
 
 bool chooseRotary(int chooseAmount, int level);  //number of rotary want to choose
-//void decryptInitial();
+												 //void decryptInitial();
 bool rotaryChoose();  //first rotary, call rotaryChoose2() recursively
 bool rotaryChoose2();  //second rotary, call rotaryChoose3() recursively
 bool rotaryChoose3();  //third rotary, call plugTest()
@@ -264,7 +264,7 @@ bool pt(char guessChar) {
 					curNum[i] = curNumSave[i];
 				for (int k = 0; k < pairPosition[j]; ++k)
 					rotate();
-				
+
 				char outc = encryRotary(i + 'A');
 				if (outc != correctPair[j].w2) {  //Wire(outc, correctPiar[j].w2)
 					Wire newGuess(outc, correctPair[j].w2);
