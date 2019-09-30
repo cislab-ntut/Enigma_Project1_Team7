@@ -170,6 +170,7 @@ char testChar[3] = { 'I', 'E', 'C' };
 //I, H, Q, G, L, U, X; E, P, Z; T, C, R, M
 
 int curNumSave[3];  //use this to guess 26*26*26 cases
+int iniNumSave[3];
 vector<int> curPlug;  //current choosed plug set
 vector<Wire> guessPlug;
 vector<char> guessSingle;
@@ -190,6 +191,7 @@ vector<int> choosedRotary;
 
 bool chooseRotary(int chooseAmount, int level);  //number of rotary want to choose
 bool searchChoosedRotary(int);
+bool rotateRotary();
 
 bool plugTest();  //first level plug set, call plugTest2() recursively
 bool pt(char);
@@ -504,7 +506,7 @@ bool chooseRotary(int chooseAmount, int level) {  //initial (3, 0)
 
 			choosedRotary.push_back(i);
 			if (level == chooseAmount) {
-				if (plugTest())
+				if (rotateRotary())
 					return true;
 			}
 			else if (chooseRotary(chooseAmount, level + 1)) {
@@ -522,5 +524,20 @@ bool searchChoosedRotary(int n) {
 	for (int i = 0; i < choosedRotary.size(); ++i)
 		if (n = choosedRotary[i])
 			return true;
+	return false;
+}
+
+bool rotateRotary() {
+	do {
+		if (plugTest()) {
+			return true;
+		}
+		for (int i = 0; i < 3; ++i)
+			curNum[i] = curNumSave[i];
+		rotate();
+		for (int i = 0; i < 3; ++i)
+			curNumSave[i] = curNum[i];
+	} while (curNumSave[0] == iniNumSave[0] && curNumSave[1] == iniNumSave[1] && curNumSave[2] == iniNumSave[2]);
+
 	return false;
 }
