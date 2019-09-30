@@ -1,4 +1,5 @@
 #include<iostream>  //base 1ppl
+#include<algorithm>
 #include<string>
 #include<vector>
 
@@ -19,7 +20,7 @@ vector<Wire> wire;
 
 void decrypt();
 
-void initial(int[], string);  //rotary index, state  1ppl  //iniNum, curNum, rotary*5, wire*10
+void initial();  //rotary index, state  1ppl  //iniNum, curNum, rotary*5, wire*10
 string encrypt(string);  //1ppl  call encry()
 char encry(char);  //3ppl
 void rotate();  //1ppl  rotate curNum
@@ -44,6 +45,16 @@ int main(int args, char* argv[]) {
 	cout << "Input the three rotor's starting alphabet and current alphabet:(XDH)";
 	cin >> curState;
 
+	for (int i = 0; i < 3; ++i) {
+		curNum[i] = curState[i] - 'A';
+	}
+
+	/*
+	// check it works well
+	for(int i = 0; i < 3; ++i)
+	cout << rotary[selectRol[i]][iniNum[i]] << rotary[selectRol[i]][curNum[i]] << endl;
+	*/
+
 	cout << "Input plugboard:";
 	cin.ignore();
 	getline(cin, plugState);
@@ -54,7 +65,7 @@ int main(int args, char* argv[]) {
 		wire[plugNum++].w2 = plugState[i + 1];*/
 	}
 
-	initial(selectRol, curState);
+	initial();
 	string input, output;
 	while (true) {
 		cout << "Input the plaintext what you want to encrypt:";
@@ -65,7 +76,7 @@ int main(int args, char* argv[]) {
 	}
 }
 
-void initial(int selectRol[], string curState) {
+void initial() {
 	rotary[1] = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
 	rotary[2] = "AJDKSIRUXBLHWTMCQGZNPYFVOE";
 	rotary[3] = "BDFHJLCPRTXVZNYEIWGAKMUSQO";
@@ -77,14 +88,6 @@ void initial(int selectRol[], string curState) {
 	iniNum[3] = 'W' - 'A';
 	iniNum[4] = 'K' - 'A';
 	iniNum[5] = 'A' - 'A';
-	for (int i = 0; i < 3; ++i) {
-		curNum[i] = curState[i] - 'A';
-	}
-	/*
-	// check it works well
-	for(int i = 0; i < 3; ++i)
-	cout << rotary[selectRol[i]][iniNum[i]] << rotary[selectRol[i]][curNum[i]] << endl;
-	*/
 }
 
 string encrypt(string plaintext) {
@@ -210,6 +213,7 @@ void setPlug();  //set curPlug(vector<int>) into wire[12](Wire)  //can combine i
 void unrotate();  //rotate inversed
 
 void decrypt() {
+	initial();
 	choosedRotary.clear();
 
 	if (chooseRotary(3, 0)) {  //correct set
@@ -247,6 +251,7 @@ bool pt(char guessChar) {
 	Wire guess;
 	guess.w1 = guessChar;
 	for (int i = 0; i < 25; ++i) {
+		cout << "pt" << i << endl;
 		bool wrongFlag = false;
 		if (i == guessChar - 'A') continue;
 		guess.w2 = i + 'A';
@@ -258,7 +263,7 @@ bool pt(char guessChar) {
 		for (int j = 0; j < 20; ++j) {
 			if (correctPair[j].w1 == guessChar) {  //(I,H) (I,Q) (I,G)
 				for (int k = 0; k < 3; ++k)
-					curNum[i] = curNumSave[i];
+					curNum[k] = curNumSave[k];
 				for (int k = 0; k < pairPosition[j]; ++k)
 					rotate();
 
@@ -414,6 +419,10 @@ bool ex(int plugAmount, string& exception, int lastPlugNum) {
 }
 
 bool checkExcept(int letter, string& exception) {
+	vector<int>::iterator it;
+	it = find(curPlug.begin(),curPlug.end(), letter + 'A');
+	if(it != curPlug.end())
+		return true;
 	char c = letter + 'A';
 	if (exception.find(c) != exception.npos)  //c is in exception
 		return true;
@@ -423,13 +432,24 @@ bool checkExcept(int letter, string& exception) {
 bool checkAns() { 
 	setMachine();
 	string output = encrypt(plain);
-	for(int i=0;i<output.size();i++)
-		if(output[i] != cipher[i])
-			return false;
+	if(output != cipher)
+		return false;
 	return true;
 }
 
+void setMachine() {
+	setPlug();
+	for(int i = 0; i < 3; ++i) {
+		curNum[i] = curNumSave[i];
+	}
+}
 
+void setPlug() {
+	for(int i = 0; i < 12; i+=2) {
+		Wire w(curPlug[i],curPlug[i + 1]);
+		wire.push_back(w);
+	}
+}
 
 bool searchGuessPlug(Wire& plug) {
 	for (int i = 0; i < guessPlug.size(); ++i)
@@ -440,7 +460,7 @@ bool searchGuessPlug(Wire& plug) {
 
 bool checkGuessPlug(Wire& plug) {  //check if no contradiction of plug, true for no contradiction
 	if (searchGuessPlug(plug))  //same
-		return true;
+		return false;
 	for (int i = 0; i < guessPlug.size(); ++i) {
 		if (plug.w1 == guessPlug[i].w1 || plug.w1 == guessPlug[i].w2 || plug.w2 == guessPlug[i].w1 || plug.w2 == guessPlug[i].w2)  //contradiction
 			return false;
@@ -500,11 +520,11 @@ bool searchWrongSingle(char c) {
 }
 
 bool chooseRotary(int chooseAmount, int level) {  //initial (3, 0)
-	if (level < chooseAmount) {
+	if (level <= chooseAmount) {
 		for (int i = 1; i <= 5; ++i) {
 			if (searchChoosedRotary(i)) continue;  //already been chosen
 
-			choosedRotary.push_back(i);
+			selectRol[level - 1] = i;
 			if (level == chooseAmount) {
 				if (rotateRotary())
 					return true;
@@ -521,8 +541,8 @@ bool chooseRotary(int chooseAmount, int level) {  //initial (3, 0)
 }
 
 bool searchChoosedRotary(int n) {
-	for (int i = 0; i < choosedRotary.size(); ++i)
-		if (n = choosedRotary[i])
+	for(int i = 0; i < 3; ++i)
+		if( n == selectRol[i])
 			return true;
 	return false;
 }
