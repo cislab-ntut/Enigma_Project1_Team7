@@ -189,16 +189,11 @@ int rotaryNums[6] = { 0, 1, 2, 3, 4, 5 };  //1 ~ 5
 vector<int> choosedRotary;
 
 bool chooseRotary(int chooseAmount, int level);  //number of rotary want to choose
-												 //void decryptInitial();
-bool rotaryChoose();  //first rotary, call rotaryChoose2() recursively
-bool rotaryChoose2();  //second rotary, call rotaryChoose3() recursively
-bool rotaryChoose3();  //third rotary, call plugTest()
+bool searchChoosedRotary(int);
 
 bool plugTest();  //first level plug set, call plugTest2() recursively
 bool pt(char);
 void addWrong();
-//bool plugTest2();  //second level, call plugTest3()
-//bool plugTest3();  //third level, call exhaustiveAtk()
 
 char encryRotary(char);
 
