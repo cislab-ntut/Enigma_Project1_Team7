@@ -31,6 +31,7 @@ int main(int args, char* argv[]) {
 	if (args > 1)
 		if (argv[1][0] == '-' && argv[1][1] == 'd') {
 			decrypt();
+			system("pause");
 			return 0;
 		}
 
@@ -217,6 +218,11 @@ void decrypt() {
 
 	if (chooseRotary(3, 0)) {  //correct set
 		cout << "correct set" << endl;
+		for(int i : selectRol)
+			cout << i;
+		for(Wire w : wire)
+			cout << w.w1 << w.w2 << ' ';
+		cout << endl;
 		//print out the correct set and use the set to print out the plain text
 	}
 	else {
@@ -237,7 +243,6 @@ bool plugTest() {
 	for (int i = 0; i < 14; ++i) {
 		if (pt(guessChars[i]))
 			return true;
-		cout << "PTest" << i << endl;
 	}
 
 	return false;
@@ -249,7 +254,6 @@ bool pt(char guessChar) {
 	Wire guess;
 	guess.w1 = guessChar;
 	for (int i = 0; i < 25; ++i) {
-		cout << "pt" << i << endl;
 		bool wrongFlag = false;
 		if (i == guessChar - 'A') continue;
 		guess.w2 = i + 'A';
@@ -446,6 +450,7 @@ void setMachine() {
 }
 
 void setPlug() {
+	wire.clear();
 	for(int i = 0; i < 12; i+=2) {
 		Wire w(curPlug[i],curPlug[i + 1]);
 		wire.push_back(w);
@@ -527,6 +532,9 @@ bool chooseRotary(int chooseAmount, int level) {  //initial (3, 0)
 
 			selectRol[level - 1] = i;
 			if (level == chooseAmount) {
+				cout << "\nselectRol";
+				for(int i : selectRol)
+					cout << i << ' ';
 				if (rotateRotary())
 					return true;
 			}
@@ -550,6 +558,9 @@ bool searchChoosedRotary(int n) {
 
 bool rotateRotary() {
 	do {
+		cout << "\nTest:";
+		for(int i : curNumSave)
+			cout << i << ' ';
 		if (plugTest()) {
 			return true;
 		}
@@ -558,7 +569,7 @@ bool rotateRotary() {
 		rotate();
 		for (int i = 0; i < 3; ++i)
 			curNumSave[i] = curNum[i];
-	} while (curNumSave[0] == iniNumSave[0] && curNumSave[1] == iniNumSave[1] && curNumSave[2] == iniNumSave[2]);
+	} while (!(curNumSave[0] == iniNumSave[0] && curNumSave[1] == iniNumSave[1] && curNumSave[2] == iniNumSave[2]));
 
 	return false;
 }
