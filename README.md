@@ -4,21 +4,21 @@
 
 ## Encryption
 
-##### Input Format
+#### Input Format
 The input begin with three positive integer $r_i$, which specifies the $i$th rotary. Next line has a three-uppercase-letter string, each of the letter represents the $i$th rotary setting. The last line contains a string $p$, which is the plaintext you want to encrypt.
 
-##### Output Format
+#### Output Format
 The output is only one line with the ciphertext which you encypted from plaintext.
 
-##### Technical Specification
+#### Technical Specification
 - 1  ≤ i ≤ 5
 
-##### Sample Input:
+#### Sample Input:
 > 3 2 1  
 > WFR XDH  
 > ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
-##### Sample Output:
+#### Sample Output:
 >KQGJALNNGTESJCXFSWEYLSNCIW
 
 ## Decryption
