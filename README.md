@@ -15,7 +15,7 @@ The output is only one line with the ciphertext which you encypted from plaintex
 
 #### Sample Input:
 > 3 2 1  
-> WFR XDH  
+> XDH  
 > ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 #### Sample Output:
