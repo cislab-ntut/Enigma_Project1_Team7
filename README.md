@@ -5,7 +5,7 @@
 ## Encryption
 
 #### Input Format
-The input begin with three positive integer ***r<sub>i</sub>***, which specifies the ***i***th rotary. Next line has a three-uppercase-letter string, each of the letter represents the ***i***th rotary setting. The last line contains a string ***p***, which is the plaintext you want to encrypt.
+The input begin with three positive integer ***r<sub>i</sub>***, which specifies the ***i***th rotary. Next line has a three-uppercase-letter string, each of the letter represents the ***i***th rotary setting. The last line contains a string ***p***, the plaintext you have to encrypt.
 
 #### Output Format
 The output is only one line with the ciphertext which you encypted from plaintext.
