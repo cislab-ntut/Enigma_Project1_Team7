@@ -58,12 +58,10 @@ bool checkAns(); // call setMachine() then throw "HEILHITLER" into encrypt() and
 void setMachine(); // set the setting of the test  e.g. rotary, plug    ; call setPlug()
 void setPlug(); // set curPlug(vector<int>) into wire[12](Wire)  //can combine into setMachine()
 
-void unrotate();  //rotate inversed
-
 
 int main(int args, char* argv[]) {
-    decrypt();
-    return 0;
+    // decrypt();
+    // return 0;
 
 	if (args > 1) {
         if (argv[1][0] == '-' && argv[1][1] == 'd') {
@@ -230,7 +228,7 @@ void decrypt() {
 	initial();
 	choosedRotary.clear();
     selectedRol.clear();
-	selectedRol.push_back(5);
+	selectedRol.push_back(1);
 	chooseRotary(3);
 	// if (chooseRotary(3)) {
 	// 	cout << "correct set" << endl;
@@ -484,9 +482,14 @@ void printAns() {
 
 	outFile << "correct set" << endl;
 	for(int i : selectedRol)
-		outFile << i;
+		outFile << i << ' ';
+	outFile << endl;
+	for(int i = 0; i < 3; ++i) {
+		outFile << char(curNum[i] + 'A') << ' ';
+	}
+	outFile << endl;
 	for(Wire w : wire)
-		outFile << w.w1 << w.w2 << ' ';
+		outFile << char(w.w1) << char(w.w2) << ' ';
 	outFile << endl;
 	outFile.close();
 }
@@ -496,6 +499,7 @@ bool checkAns() {
 	string output = encrypt(plain);
 	if(output != cipher)
 		return false;
+	setMachine();
 	printAns();
 }
 
@@ -632,7 +636,7 @@ bool rotateRotary() {
 		// cout << "\rTest:\t";
 		// for(int i : curNumSave)
 		// 	cout << i << '\t';
-		//	cout << endl;
+		// 	cout << endl;
 		// if (plugTest()) {
 		// 	return true;
 		// }
