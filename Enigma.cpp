@@ -35,8 +35,8 @@ void decrypt();
 bool chooseRotary(unsigned int chooseAmount);
 bool searchChoosedRotary(int n);
 bool rotateRotary();
-bool plugTest();
-bool pt(char);
+void plugTest();
+void pt(char);
 
 bool searchGuessPlug(Wire&); // search the same
 bool checkGuessPlug(Wire&); // check if contradiction, true for no contradiction
@@ -66,7 +66,6 @@ int main(int args, char* argv[]) {
 	if (args > 1) {
         if (argv[1][0] == '-' && argv[1][1] == 'd') {
 			decrypt();
-			system("pause");
 			return 0;
 		}
     }
@@ -221,15 +220,17 @@ vector<Wire> wrongPlug;
 vector<char> wrongSingle;
 
 // use this to guess 26*26*26 cases
-int curNumSave[3] = {};
+int curNumSave[3] = {20, 9, 21};
 int iniNumSave[3] = {};
 
 void decrypt() {
 	initial();
 	choosedRotary.clear();
     selectedRol.clear();
-	selectedRol.push_back(1);
+	selectedRol.push_back(4);
 	chooseRotary(3);
+	// rotateRotary();
+
 	// if (chooseRotary(3)) {
 	// 	cout << "correct set" << endl;
 	// 	for(int i : selectedRol)
@@ -268,7 +269,7 @@ char encryOnRotary(char input) {
 	return char(c + 'A');
 }
 
-bool plugTest() {
+void plugTest() {
 	curPlug.clear();
 	guessPlug.clear();
 	guessSingle.clear();
@@ -284,10 +285,9 @@ bool plugTest() {
 		// 	return true;
 		pt(guessChars[i]);
 	}
-	return false;
 }
 
-bool pt(char guessChar) {
+void pt(char guessChar) {
 	//curPlug.push_back(guessChar-'A');
 	Wire guess;
 	guess.w1 = guessChar;
@@ -358,8 +358,9 @@ bool pt(char guessChar) {
 			continue;
 		}
 		else if (guessPlug.size() == 6) {
-			if (checkAns())
-				return true;
+			if (checkAns()){
+				//nothing
+			}
 			else {
 				addWrong();
 				continue;
@@ -392,8 +393,6 @@ bool pt(char guessChar) {
 	isSingle.push_back(guessChar);
 	guessPlug.clear();
 	guessSingle.clear();
-
-	return false;
 }
 
 void addWrong() {
@@ -501,6 +500,7 @@ bool checkAns() {
 		return false;
 	setMachine();
 	printAns();
+	return true;
 }
 
 void setMachine() {
@@ -633,10 +633,10 @@ bool searchChoosedRotary(int n) {
 
 bool rotateRotary() {
 	do {
-		// cout << "\rTest:\t";
-		// for(int i : curNumSave)
-		// 	cout << i << '\t';
-		// 	cout << endl;
+		cout << "\rTest:\t";
+		for(int i : curNumSave)
+			cout << i << '\t';
+			cout << endl;
 		// if (plugTest()) {
 		// 	return true;
 		// }
