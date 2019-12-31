@@ -227,8 +227,15 @@ void decrypt() {
 	initial();
 	choosedRotary.clear();
     selectedRol.clear();
+
+	// Usage 1
 	selectedRol.push_back(4);
 	chooseRotary(3);
+
+	// Usage 2
+	// selectedRol.push_back(1);
+	// selectedRol.push_back(2);
+	// selectedRol.push_back(3);
 	// rotateRotary();
 
 	// if (chooseRotary(3)) {
