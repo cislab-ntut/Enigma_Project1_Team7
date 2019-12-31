@@ -35,8 +35,8 @@ selectedRol.push_back(2);
 selectedRol.push_back(3);
 rotateRotary();
 ```
-- Usage 1: Fixed the first rotary number and execute it.
-- Usage 2: Fixed all of three rotary number and execute. This means that only decrypt the only one case of the order of rotary.
+- Usage 1: Execute after fixed the first rotary number and iterating the others rotary.
+- Usage 2: Fixed all of three rotary number and directly execute the rotate function. This means that only decrypt the only one case of the order of rotary.
 
 ### Execute
 ```
