@@ -14,12 +14,16 @@ The output is only one line with the ciphertext which you encypted from plaintex
 - 1  ≤ ***i*** ≤ 5
 
 #### Sample Input:
-> 3 2 1  
-> XDH  
-> ABCDEFGHIJKLMNOPQRSTUVWXYZ
+```
+3 2 1  
+XDH  
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+```
 
 #### Sample Output:
->KQGJALNNGTESJCXFSWEYLSNCIW
+```
+KQGJALNNGTESJCXFSWEYLSNCIW
+```
 
 ## Decryption
 
