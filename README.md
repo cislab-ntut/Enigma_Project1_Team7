@@ -27,7 +27,7 @@ KQGJALNNGTESJCXFSWEYLSNCIW
 
 ## Decryption
 
-Modifiy the function `decrypt()` to choose the way to decrypt.
+> Modifiy the function `decrypt()` to choose the way to decrypt.
 ```c++
 // Usage 1
 selectedRol.push_back(4);
@@ -47,7 +47,7 @@ rotateRotary();
 > g++ -O3 -std=c++17 Enigma.cpp -o Enigma.out -mavx2
 > Enigma.out -d
 ```
-Remember that use the `-O3` optimization to maximal the speed of executing.
+> Remember that use the `-O3` optimization to maximal the speed of executing.
 
 ### Result
 All of the results will be written into `ans.txt` with append mode (if ans.txt does not exist, it will be generated automatically). Copy the plugboard result and paste it to the string constant at line 69 in` Rotate. cpp` before compiling and executing directly. This input format is similar to `Enigma.cpp`.
