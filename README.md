@@ -50,7 +50,17 @@ rotateRotary();
 Remember that use the `-O3` optimization to maximal the speed of executing.
 
 ### Result
-All of the results will be write into `ans.txt` with append mode (if ans.txt does not exist, it will be generated automatically). Copy the plugboard result and paste it to the string constant at line 69 in `Rotate.cpp`.
+All of the results will be written into `ans.txt` with append mode (if ans.txt does not exist, it will be generated automatically). Copy the plugboard result and paste it to the string constant at line 69 in` Rotate. cpp` before compiling and executing directly. This input format is similar to `Enigma.cpp`.
+
+### Answer Format
+```
+> The first line has three numbers without space indicate the ***i***'s rotor.
+> The second line has three numbers with space indicate the starting index.
+> The third line has Three alphabets without space indicate the starting index transform to the alphabet.
+> The fourth line has six-string, each with two alphabets.
+> The last line is the plaintext after decryption.
+```
+Notice that all answers below are the last 10 characters' initial settings, so you have to run the `Rotate.cpp` to get the complete ciphertexts initial setting.
 
 ### Cloud Computing
 We use the AWS EC2 instance to perform decryption. With five instances with t2.micro, expected in 25 days can finish all of the decryption. Despite the slow decryption speed, we can use a multi-thread for maximum decryption speed if we have multi-core in the other instance type except for t2.micro. Of course, we use t2.micro because it is free.
